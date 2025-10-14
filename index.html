@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 1 Unit Test - Accessible Version</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.8;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dyslexia-font {
+            font-family: 'Comic Sans MS', 'OpenDyslexic', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .dark-mode .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .dark-mode .student-info {
+            background: #2d3748;
+        }
+
+        .info-field {
+            margin-bottom: 20px;
+        }
+
+        .info-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+
+        .info-field input, .info-field select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .dark-mode .info-field input,
+        .dark-mode .info-field select {
+            background: #4a5568;
+            color: #e0e0e0;
+            border-color: #718096;
+        }
+
+        .info-field input:focus, .info-field select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .accessibility-toolbar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .dark-mode .accessibility-toolbar {
+            background: #2d3748;
+        }
+
+        .toolbar-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .toolbar-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tool-button {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .dark-mode .tool-button {
+            background: #4a5568;
+            color: #a0aec0;
+            border-color: #718096;
+        }
+
+        .tool-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .tool-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .dark-mode .tool-button.active {
+            background: #718096;
+            color: white;
+        }
+
+        .language-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .dark-mode .language-selector {
+            background: #1a202c;
+        }
+
+        .status-indicator {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        .dark-mode .status-indicator {
+            background: #1a202c;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .dark-mode .section {
+            background: #2d3748;
+        }
+
+        .section.focused {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .section.blurred {
+            opacity: 0.3;
+            filter: blur(3px);
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .dark-mode .section-title {
+            color: #a0aec0;
+            border-bottom-color: #718096;
+        }
+
+        .question {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .dark-mode .question {
+            background: #1a202c;
+        }
+
+        .question-number {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .dark-mode .question-number {
+            color: #a0aec0;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .points {
+            color: #888;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .choices {
+            margin-top: 15px;
+        }
+
+        .choice {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dark-mode .choice {
+            background: #4a5568;
+            border-color: #718096;
+        }
+
+        .choice:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .dark-mode .choice:hover {
+            background: #2d3748;
+            border-color: #a0aec0;
+        }
+
+        .choice input[type="radio"] {
+            width: 25px;
+            height: 25px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .choice label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        .fill-blank-input, .essay-textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .dark-mode .fill-blank-input,
+        .dark-mode .essay-textarea {
+            background: #4a5568;
+            color: #e0e0e0;
+            border-color: #718096;
+        }
+
+        .fill-blank-input:focus, .essay-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .essay-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.8;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .dark-mode .instructions {
+            background: #2d3748;
+            border-left-color: #718096;
+        }
+
+        .instructions-title {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .speak-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .speak-button:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .simple-text {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .dark-mode .simple-text {
+            background: #1a202c;
+        }
+
+        .simple-text.visible {
+            display: block;
+        }
+
+        .submit-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .dark-mode .submit-section {
+            background: #2d3748;
+        }
+
+        .submit-button {
+            padding: 20px 50px;
+            font-size: 1.4em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media print {
+            .accessibility-toolbar, .tool-button, .speak-button {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .toolbar-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>📚 Topic 1 Unit Test</h1>
+        <p style="font-size: 1.2em;">Early Human Societies & Civilizations</p>
+    </div>
+
+    <!-- Accessibility Toolbar -->
+    <div class="accessibility-toolbar">
+        <div class="toolbar-title">♿ Accessibility Tools</div>
+        
+        <div class="toolbar-buttons">
+            <button class="tool-button" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+            <button class="tool-button" onclick="increaseFontSize()">🔍 Bigger Text</button>
+            <button class="tool-button" onclick="decreaseFontSize()">🔍 Smaller Text</button>
+            <button class="tool-button" onclick="toggleDyslexiaFont()">📖 Dyslexia Font</button>
+            <button class="tool-button" onclick="enableTextToSpeech()">🔊 Read Aloud</button>
+            <button class="tool-button" onclick="toggleFocusMode()">🎯 Focus Mode</button>
+            <button class="tool-button" onclick="toggleSimpleLanguage()">💬 Simple Words</button>
+            <button class="tool-button" onclick="printTest()">🖨️ Print Test</button>
+        </div>
+
+        <div class="language-selector">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <strong style="font-size: 1.3em;">🌍 Choose Your Language:</strong>
+                <p style="font-size: 0.95em; color: #666; margin-top: 8px;">
+                    Available: English, Spanish (Español), Chinese (中文), Korean (한국어), Albanian (Shqip), Arabic (العربية), and 100+ more!
+                </p>
+            </div>
+            <div id="google_translate_element"></div>
+        </div>
+
+        <div class="status-indicator">
+            <strong>🎯 Active Features:</strong> <span id="activeFeatures">None</span>
+        </div>
+    </div>
+
+    <!-- Student Information -->
+    <div class="student-info section">
+        <h2 style="margin-bottom: 20px;">👤 Student Information</h2>
+        <div class="info-field">
+            <label for="firstName">First Name: *</label>
+            <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+        </div>
+        <div class="info-field">
+            <label for="lastName">Last Name: *</label>
+            <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+        </div>
+        <div class="info-field">
+            <label for="hour">Class Hour: *</label>
+            <select id="hour" name="hour" required>
+                <option value="">Select your hour</option>
+                <option value="1">Hour 1</option>
+                <option value="2">Hour 2</option>
+                <option value="5">Hour 5</option>
+                <option value="6">Hour 6</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Multiple Choice Section -->
+    <div class="section" onclick="focusSection(this)">
+        <h2 class="section-title">📝 Multiple Choice Questions</h2>
+        
+        <div class="instructions">
+            <div class="instructions-title">📋 Instructions:</div>
+            <p>Select the choice that BEST answers each question. Each question is worth 3 points.</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question">
+            <div class="question-number">Question 1 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Which describes a way that early hunter-gatherers got food?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Which describes a way that early hunter-gatherers got food?
+            </div>
+            <div class="simple-text" id="simple-q1">
+                <strong>Simpler Version:</strong> How did early people who hunted and gathered get their food?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q1a" name="q1" value="A">
+                    <label for="q1a">They used chickens to lay eggs.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q1b" name="q1" value="B">
+                    <label for="q1b">They grew crops on farms.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q1c" name="q1" value="C">
+                    <label for="q1c">They grew seeds and nuts.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q1d" name="q1" value="D">
+                    <label for="q1d">They used tools to kill animals.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            <div class="question-number">Question 2 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What is an artifact?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What is an artifact?
+            </div>
+            <div class="simple-text" id="simple-q2">
+                <strong>Simpler Version:</strong> What is something made or used by humans from long ago?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q2a" name="q2" value="A">
+                    <label for="q2a">an imprint of a plant from long ago</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q2b" name="q2" value="B">
+                    <label for="q2b">an object made or used by humans</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q2c" name="q2" value="C">
+                    <label for="q2c">the remains of a person from long ago</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q2d" name="q2" value="D">
+                    <label for="q2d">a food prepared or eaten by humans</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            <div class="question-number">Question 3 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What does the word migrate mean?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What does the word "migrate" mean?
+            </div>
+            <div class="simple-text" id="simple-q3">
+                <strong>Simpler Version:</strong> What does it mean when people or animals migrate?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q3a" name="q3" value="A">
+                    <label for="q3a">To move from one place to another</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q3b" name="q3" value="B">
+                    <label for="q3b">To hunt for food</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q3c" name="q3" value="C">
+                    <label for="q3c">A swelling that people lived in</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q3d" name="q3" value="D">
+                    <label for="q3d">A pain in a person's head</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            <div class="question-number">Question 4 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What is history?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What is history?
+            </div>
+            <div class="simple-text" id="simple-q4">
+                <strong>Simpler Version:</strong> History is the study of what?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q4a" name="q4" value="A">
+                    <label for="q4a">A historian</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q4b" name="q4" value="B">
+                    <label for="q4b">The study of the present</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q4c" name="q4" value="C">
+                    <label for="q4c">The study of the past.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q4d" name="q4" value="D">
+                    <label for="q4d">Land surrounded by water.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            <div class="question-number">Question 5 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Knowledge, beliefs, customs, and values of a group of people is called')">🔊</button>
+            </div>
+            <div class="question-text">
+                Knowledge, beliefs, customs, and values of a group of people is called
+            </div>
+            <div class="simple-text" id="simple-q5">
+                <strong>Simpler Version:</strong> What do we call the way a group of people live, think, and believe?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q5a" name="q5" value="A">
+                    <label for="q5a">fossils</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q5b" name="q5" value="B">
+                    <label for="q5b">archaeology</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q5c" name="q5" value="C">
+                    <label for="q5c">artifacts</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q5d" name="q5" value="D">
+                    <label for="q5d">culture</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            <div class="question-number">Question 6 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What are preserved remains of humans, plants, or animals called?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What are preserved remains of humans, plants, or animals called?
+            </div>
+            <div class="simple-text" id="simple-q6">
+                <strong>Simpler Version:</strong> What do we call old remains that have been saved in rocks?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q6a" name="q6" value="A">
+                    <label for="q6a">Fossil</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q6b" name="q6" value="B">
+                    <label for="q6b">Cave drawing</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q6c" name="q6" value="C">
+                    <label for="q6c">Artifact</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q6d" name="q6" value="D">
+                    <label for="q6d">Dinosaur</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            <div class="question-number">Question 7 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Person who gets food from hunting animals and gathering fruits, berries, nuts, and vegetables from wild plants.')">🔊</button>
+            </div>
+            <div class="question-text">
+                Person who gets food from hunting animals and gathering fruits, berries, nuts, and vegetables from wild plants.
+            </div>
+            <div class="simple-text" id="simple-q7">
+                <strong>Simpler Version:</strong> What do we call someone who hunts animals and picks wild plants for food?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q7a" name="q7" value="A">
+                    <label for="q7a">Archaeologist</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q7b" name="q7" value="B">
+                    <label for="q7b">Hunter-gatherer</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q7c" name="q7" value="C">
+                    <label for="q7c">Rancher</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q7d" name="q7" value="D">
+                    <label for="q7d">Farmer</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            <div class="question-number">Question 8 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What is the term for the belief that spirits fill the natural world?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What is the term for the belief that spirits fill the natural world?
+            </div>
+            <div class="simple-text" id="simple-q8">
+                <strong>Simpler Version:</strong> What is the belief that spirits are in nature?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q8a" name="q8" value="A">
+                    <label for="q8a">humanism</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q8b" name="q8" value="B">
+                    <label for="q8b">animism</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q8c" name="q8" value="C">
+                    <label for="q8c">naturalism</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q8d" name="q8" value="D">
+                    <label for="q8d">spiritualism</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            <div class="question-number">Question 9 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What can you do with domesticated animals?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What can you do with domesticated animals?
+            </div>
+            <div class="simple-text" id="simple-q9">
+                <strong>Simpler Version:</strong> What can you do with animals that have been tamed?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q9a" name="q9" value="A">
+                    <label for="q9a">hunt them for food</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q9b" name="q9" value="B">
+                    <label for="q9b">study their origins</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q9c" name="q9" value="C">
+                    <label for="q9c">use them for work</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q9d" name="q9" value="D">
+                    <label for="q9d">watch them hunt</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            <div class="question-number">Question 10 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What happens during a revolution?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What happens during a revolution?
+            </div>
+            <div class="simple-text" id="simple-q10">
+                <strong>Simpler Version:</strong> How much does life change during a revolution?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q10a" name="q10" value="A">
+                    <label for="q10a">Life changes some.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q10b" name="q10" value="B">
+                    <label for="q10b">Life does not change.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q10c" name="q10" value="C">
+                    <label for="q10c">Life changes a little.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q10d" name="q10" value="D">
+                    <label for="q10d">Life changes completely.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question">
+            <div class="question-number">Question 11 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Why did people domesticate plants?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Why did people domesticate plants?
+            </div>
+            <div class="simple-text" id="simple-q11">
+                <strong>Simpler Version:</strong> Why did people start growing their own plants?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q11a" name="q11" value="A">
+                    <label for="q11a">They were more flavorful.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q11b" name="q11" value="B">
+                    <label for="q11b">They made it easier to migrate.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q11c" name="q11" value="C">
+                    <label for="q11c">They wanted to live in a variety of environments.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q11d" name="q11" value="D">
+                    <label for="q11d">They were a reliable food supply.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question">
+            <div class="question-number">Question 12 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Why did people create new tools?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Why did people create new tools?
+            </div>
+            <div class="simple-text" id="simple-q12">
+                <strong>Simpler Version:</strong> What was the main reason people made new tools?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q12a" name="q12" value="A">
+                    <label for="q12a">to use raw materials</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q12b" name="q12" value="B">
+                    <label for="q12b">to learn a craft</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q12c" name="q12" value="C">
+                    <label for="q12c">to make life easier</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q12d" name="q12" value="D">
+                    <label for="q12d">to practice new skills</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question">
+            <div class="question-number">Question 13 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Specialization includes people who')">🔊</button>
+            </div>
+            <div class="question-text">
+                Specialization includes people who
+            </div>
+            <div class="simple-text" id="simple-q13">
+                <strong>Simpler Version:</strong> When people specialize, they become very good at what?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q13a" name="q13" value="A">
+                    <label for="q13a">grow all their own food.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q13b" name="q13" value="B">
+                    <label for="q13b">are very good at one skill.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q13c" name="q13" value="C">
+                    <label for="q13c">speak one language very well.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q13d" name="q13" value="D">
+                    <label for="q13d">can solve almost any problem.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question">
+            <div class="question-number">Question 14 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What happens in a community\'s economy?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What happens in a community's economy?
+            </div>
+            <div class="simple-text" id="simple-q14">
+                <strong>Simpler Version:</strong> What happens with goods and services in a community?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q14a" name="q14" value="A">
+                    <label for="q14a">Enough goods are produced for a small number of people to survive.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q14b" name="q14" value="B">
+                    <label for="q14b">Hunters, gatherers, and farmers produce everything.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q14c" name="q14" value="C">
+                    <label for="q14c">Services produce goods and store them for later use.</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q14d" name="q14" value="D">
+                    <label for="q14d">Goods and services are produced and distributed.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question">
+            <div class="question-number">Question 15 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Which best defines a civilization?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Which best defines a civilization?
+            </div>
+            <div class="simple-text" id="simple-q15">
+                <strong>Simpler Version:</strong> What is a civilization?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q15a" name="q15" value="A">
+                    <label for="q15a">a community with cities, government, and specialized workers</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q15b" name="q15" value="B">
+                    <label for="q15b">a community ruled by customs and a council to settle disputes</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q15c" name="q15" value="C">
+                    <label for="q15c">a community built on farming instead of hunting and gathering</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q15d" name="q15" value="D">
+                    <label for="q15d">a community that has many different social classes</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question">
+            <div class="question-number">Question 16 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What were the most important resources for early civilizations?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What were the most important resources for early civilizations?
+            </div>
+            <div class="simple-text" id="simple-q16">
+                <strong>Simpler Version:</strong> What did early civilizations need most?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q16a" name="q16" value="A">
+                    <label for="q16a">meat, furs, and skins</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q16b" name="q16" value="B">
+                    <label for="q16b">timber and iron ore</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q16c" name="q16" value="C">
+                    <label for="q16c">soil, water, seeds, and workers</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q16d" name="q16" value="D">
+                    <label for="q16d">hunters and gatherers</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question">
+            <div class="question-number">Question 17 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Which feature of civilization is a set of shared spiritual beliefs?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Which feature of civilization is a set of shared spiritual beliefs?
+            </div>
+            <div class="simple-text" id="simple-q17">
+                <strong>Simpler Version:</strong> What do we call shared spiritual beliefs in a civilization?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q17a" name="q17" value="A">
+                    <label for="q17a">religion</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q17b" name="q17" value="B">
+                    <label for="q17b">government</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q17c" name="q17" value="C">
+                    <label for="q17c">job specialization</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q17d" name="q17" value="D">
+                    <label for="q17d">the arts</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question">
+            <div class="question-number">Question 18 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Which shape could you use to describe the structure of social classes in early civilizations?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Which shape could you use to describe the structure of social classes in early civilizations?
+            </div>
+            <div class="simple-text" id="simple-q18">
+                <strong>Simpler Version:</strong> What shape shows how social classes were organized? (Few people at top, many at bottom)
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q18a" name="q18" value="A">
+                    <label for="q18a">circle</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q18b" name="q18" value="B">
+                    <label for="q18b">pyramid</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q18c" name="q18" value="C">
+                    <label for="q18c">square</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q18d" name="q18" value="D">
+                    <label for="q18d">triangle</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question">
+            <div class="question-number">Question 19 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('Which phrase defines the time called prehistory?')">🔊</button>
+            </div>
+            <div class="question-text">
+                Which phrase defines the time called prehistory?
+            </div>
+            <div class="simple-text" id="simple-q19">
+                <strong>Simpler Version:</strong> Prehistory is the time before what?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q19a" name="q19" value="A">
+                    <label for="q19a">before computers</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q19b" name="q19" value="B">
+                    <label for="q19b">before the year 0</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q19c" name="q19" value="C">
+                    <label for="q19c">before the year 2000</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q19d" name="q19" value="D">
+                    <label for="q19d">before written records</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question">
+            <div class="question-number">Question 20 <span class="points">(3 points)</span>
+                <button class="speak-button" onclick="speakText('What technology did the early people find that helped them move out to other climate areas?')">🔊</button>
+            </div>
+            <div class="question-text">
+                What technology did the early people find that helped them move out to other climate areas?
+            </div>
+            <div class="simple-text" id="simple-q20">
+                <strong>Simpler Version:</strong> What discovery helped early people stay warm and move to colder places?
+            </div>
+            <div class="choices">
+                <div class="choice">
+                    <input type="radio" id="q20a" name="q20" value="A">
+                    <label for="q20a">fire</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q20b" name="q20" value="B">
+                    <label for="q20b">rocks</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q20c" name="q20" value="C">
+                    <label for="q20c">computers</label>
+                </div>
+                <div class="choice">
+                    <input type="radio" id="q20d" name="q20" value="D">
+                    <label for="q20d">water</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fill in the Blank Section -->
+    <div class="section" onclick="focusSection(this)">
+        <h2 class="section-title">✍️ Fill in the Blank Questions</h2>
+        
+        <div class="instructions">
+            <div class="instructions-title">📋 Instructions:</div>
+            <p>Fill in the word that is missing in each sentence. Spell each word carefully, no punctuation! Each question is worth 1 point.</p>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question">
+            <div class="question-number">Question 21 <span class="points">(1 point)</span>
+                <button class="speak-button" onclick="speakText('To blank is to change a way of life')">🔊</button>
+            </div>
+            <div class="question-text">
+                To ____________ is to change a way of life
+            </div>
+            <div class="simple-text" id="simple-q21">
+                <strong>Simpler Version:</strong> What word means "to change how you live"?
+            </div>
+            <input type="text" class="fill-blank-input" id="q21" name="q21" placeholder="Type your answer here">
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question">
+            <div class="question-number">Question 22 <span class="points">(1 point)</span>
+                <button class="speak-button" onclick="speakText('Early works of art such as these show that Stone Age people were capable of blank thoughts and actions.')">🔊</button>
+            </div>
+            <div class="question-text">
+                Early works of art such as these show that Stone Age people were capable of _________________ thoughts and actions.
+            </div>
+            <div class="simple-text" id="simple-q22">
+                <strong>Simpler Version:</strong> Stone Age art shows they could think in what kind of way?
+            </div>
+            <input type="text" class="fill-blank-input" id="q22" name="q22" placeholder="Type your answer here">
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question">
+            <div class="question-number">Question 23 <span class="points">(1 point)</span>
+                <button class="speak-button" onclick="speakText('Some communities were relying on blank for food. This marked the end of the Paleolithic Era.')">🔊</button>
+            </div>
+            <div class="question-text">
+                Some communities were relying on ___________ for food. This marked the end of the Paleolithic Era.
+            </div>
+            <div class="simple-text" id="simple-q23">
+                <strong>Simpler Version:</strong> What new way of getting food ended the Paleolithic Era?
+            </div>
+            <input type="text" class="fill-blank-input" id="q23" name="q23" placeholder="Type your answer here">
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question">
+            <div class="question-number">Question 24 <span class="points">(1 point)</span>
+                <button class="speak-button" onclick="speakText('The rise of early civilizations depended on the creation of a blank surplus.')">🔊</button>
+            </div>
+            <div class="question-text">
+                The rise of early civilizations depended on the creation of a ________ surplus.
+            </div>
+            <div class="simple-text" id="simple-q24">
+                <strong>Simpler Version:</strong> What kind of surplus (extra) did civilizations need?
+            </div>
+            <input type="text" class="fill-blank-input" id="q24" name="q24" placeholder="Type your answer here">
+        </div>
+    </div>
+
+    <!-- Essay Section -->
+    <div class="section" onclick="focusSection(this)">
+        <h2 class="section-title">📝 Essay Questions</h2>
+        
+        <div class="instructions">
+            <div class="instructions-title">📋 Instructions:</div>
+            <p>Answer each question with at least 3 sentences. Points will be deducted if your answer is not accurate or thorough.</p>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question">
+            <div class="question-number">Question 25
+                <button class="speak-button" onclick="speakText('In your opinion, what are the three most important features of a civilization? Why? YOU NEED AT LEAST 3 SENTENCES TO RECEIVE CREDIT.')">🔊</button>
+            </div>
+            <div class="question-text">
+                In your opinion, what are the three most important features of a civilization? Why? 
+                <br><strong>YOU NEED AT LEAST 3 SENTENCES TO RECEIVE CREDIT.</strong>
+            </div>
+            <div class="simple-text" id="simple-q25">
+                <strong>Simpler Version:</strong> Pick 3 important things that make a civilization. Tell why each one is important. Write at least 3 sentences.
+            </div>
+            <textarea class="essay-textarea" id="q25" name="q25" placeholder="Write your answer here... Remember to write at least 3 sentences!"></textarea>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question">
+            <div class="question-number">Question 26
+                <button class="speak-button" onclick="speakText('In your opinion, was the domestication of plants or animals the most important? Describe why...YOU NEED AT LEAST 3 SENTENCES TO RECEIVE CREDIT.')">🔊</button>
+            </div>
+            <div class="question-text">
+                In your opinion, was the domestication of plants or animals the most important? Describe why...
+                <br><strong>YOU NEED AT LEAST 3 SENTENCES TO RECEIVE CREDIT.</strong>
+            </div>
+            <div class="simple-text" id="simple-q26">
+                <strong>Simpler Version:</strong> Which was more important: taming animals or growing plants? Tell why. Write at least 3 sentences.
+            </div>
+            <textarea class="essay-textarea" id="q26" name="q26" placeholder="Write your answer here... Remember to write at least 3 sentences!"></textarea>
+        </div>
+    </div>
+
+    <!-- Submit Section -->
+    <div class="submit-section">
+        <h2 style="margin-bottom: 20px;">✅ Ready to Submit?</h2>
+        <p style="margin-bottom: 25px; font-size: 1.1em;">Make sure you've answered all questions before submitting!</p>
+        <button class="submit-button" onclick="submitTest()">Submit Test</button>
+    </div>
+
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,es,zh-CN,zh-TW,ko,sq,ar,vi,tl,hmn,ja,th,ru,fr,de,it,pt,hi,bn,pa,te,mr,ta,ur,gu,kn,ml,or,as,mai,ne,si,my,km,lo,am,ti,so,sw,zu,xh,st,sn,ny,mg,rw,ha,yo,ig,lg,wo,ms,jv,su,ceb,ilo,haw,sm,mi,to,ty',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- JavaScript -->
+    <script>
+        // Global state
+        let currentFontSize = 16;
+        let activeFeatures = new Set();
+        let focusModeActive = false;
+        let textToSpeechActive = false;
+        let simpleLanguageActive = false;
+
+        // Update status indicator
+        function updateStatus() {
+            const statusElement = document.getElementById('activeFeatures');
+            if (activeFeatures.size === 0) {
+                statusElement.textContent = 'None';
+            } else {
+                statusElement.textContent = Array.from(activeFeatures).join(', ');
+            }
+        }
+
+        // Dark Mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const button = event.target;
+            if (document.body.classList.contains('dark-mode')) {
+                activeFeatures.add('Dark Mode');
+                button.classList.add('active');
+            } else {
+                activeFeatures.delete('Dark Mode');
+                button.classList.remove('active');
+            }
+            updateStatus();
+        }
+
+        // Font Size
+        function increaseFontSize() {
+            currentFontSize += 2;
+            document.body.style.fontSize = currentFontSize + 'px';
+            activeFeatures.add('Bigger Text');
+            updateStatus();
+        }
+
+        function decreaseFontSize() {
+            if (currentFontSize > 12) {
+                currentFontSize -= 2;
+                document.body.style.fontSize = currentFontSize + 'px';
+            }
+            if (currentFontSize === 16) {
+                activeFeatures.delete('Bigger Text');
+            }
+            updateStatus();
+        }
+
+        // Dyslexia Font
+        function toggleDyslexiaFont() {
+            document.body.classList.toggle('dyslexia-font');
+            const button = event.target;
+            if (document.body.classList.contains('dyslexia-font')) {
+                activeFeatures.add('Dyslexia Font');
+                button.classList.add('active');
+            } else {
+                activeFeatures.delete('Dyslexia Font');
+                button.classList.remove('active');
+            }
+            updateStatus();
+        }
+
+        // Text to Speech
+        function enableTextToSpeech() {
+            textToSpeechActive = !textToSpeechActive;
+            const button = event.target;
+            
+            if (textToSpeechActive) {
+                activeFeatures.add('Read Aloud');
+                button.classList.add('active');
+                alert('🔊 Text-to-Speech is now ON! Click the 🔊 buttons next to questions to hear them read aloud.');
+            } else {
+                activeFeatures.delete('Read Aloud');
+                button.classList.remove('active');
+                alert('Text-to-Speech is now OFF.');
+            }
+            updateStatus();
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser doesn\'t support text-to-speech.');
+            }
+        }
+
+        // Focus Mode
+        function toggleFocusMode() {
+            focusModeActive = !focusModeActive;
+            const button = event.target;
+            
+            if (focusModeActive) {
+                activeFeatures.add('Focus Mode');
+                button.classList.add('active');
+                alert('🎯 Focus Mode is ON! Click on any section to focus only on that part.');
+            } else {
+                activeFeatures.delete('Focus Mode');
+                button.classList.remove('active');
+                // Remove all blur/focus classes
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('focused', 'blurred');
+                });
+            }
+            updateStatus();
+        }
+
+        function focusSection(clickedSection) {
+            if (!focusModeActive) return;
+            
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                if (section === clickedSection) {
+                    section.classList.add('focused');
+                    section.classList.remove('blurred');
+                } else {
+                    section.classList.add('blurred');
+                    section.classList.remove('focused');
+                }
+            });
+        }
+
+        // Simple Language
+        function toggleSimpleLanguage() {
+            simpleLanguageActive = !simpleLanguageActive;
+            const button = event.target;
+            
+            if (simpleLanguageActive) {
+                activeFeatures.add('Simple Words');
+                button.classList.add('active');
+                document.querySelectorAll('.simple-text').forEach(el => {
+                    el.classList.add('visible');
+                });
+            } else {
+                activeFeatures.delete('Simple Words');
+                button.classList.remove('active');
+                document.querySelectorAll('.simple-text').forEach(el => {
+                    el.classList.remove('visible');
+                });
+            }
+            updateStatus();
+        }
+
+        // Print Test
+        function printTest() {
+            window.print();
+        }
+
+        // Submit Test
+        function submitTest() {
+            // Check if name and hour are filled
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const hour = document.getElementById('hour').value;
+            
+            if (!firstName || !lastName || !hour) {
+                alert('⚠️ Please fill in your name and class hour before submitting!');
+                return;
+            }
+            
+            // Count answered questions
+            let answeredCount = 0;
+            const totalQuestions = 26;
+            
+            // Check multiple choice (1-20)
+            for (let i = 1; i <= 20; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredCount++;
+                }
+            }
+            
+            // Check fill in the blank (21-24)
+            for (let i = 21; i <= 24; i++) {
+                if (document.getElementById(`q${i}`).value.trim()) {
+                    answeredCount++;
+                }
+            }
+            
+            // Check essays (25-26)
+            for (let i = 25; i <= 26; i++) {
+                if (document.getElementById(`q${i}`).value.trim()) {
+                    answeredCount++;
+                }
+            }
+            
+            if (answeredCount < totalQuestions) {
+                const unanswered = totalQuestions - answeredCount;
+                if (!confirm(`⚠️ You have ${unanswered} unanswered question(s). Are you sure you want to submit?`)) {
+                    return;
+                }
+            }
+            
+            alert('✅ Test submitted successfully!\n\nStudent: ' + firstName + ' ' + lastName + '\nHour: ' + hour + '\nQuestions Answered: ' + answeredCount + '/' + totalQuestions);
+        }
+
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function (e) {
+            const hasInput = document.querySelector('input:checked, input[type="text"]:not(:placeholder-shown), textarea:not(:placeholder-shown)');
+            if (hasInput) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+
+</body>
+</html>
