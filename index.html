@@ -112,7 +112,44 @@
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 15px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .minimize-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .minimize-button:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .dark-mode .minimize-button {
+            background: #718096;
+        }
+
+        .dark-mode .minimize-button:hover {
+            background: #4a5568;
+        }
+
+        .toolbar-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .toolbar-content.collapsed {
+            max-height: 0 !important;
+            opacity: 0;
         }
 
         .toolbar-buttons {
@@ -438,31 +475,36 @@
 
     <!-- Accessibility Toolbar -->
     <div class="accessibility-toolbar">
-        <div class="toolbar-title">🛠️ Helpful Tools</div>
+        <div class="toolbar-title">
+            <span>🛠️ Helpful Tools</span>
+            <button class="minimize-button" onclick="toggleToolbar()" id="minimizeBtn">▲ Minimize</button>
+        </div>
         
-        <div class="toolbar-buttons">
-            <button class="tool-button" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-            <button class="tool-button" onclick="increaseFontSize()">🔍 Bigger Text</button>
-            <button class="tool-button" onclick="decreaseFontSize()">🔍 Smaller Text</button>
-            <button class="tool-button" onclick="toggleDyslexiaFont()">📖 Dyslexia Font</button>
-            <button class="tool-button" onclick="enableTextToSpeech()">🔊 Read Aloud</button>
-            <button class="tool-button" onclick="toggleFocusMode()">🎯 Focus Mode</button>
-            <button class="tool-button" onclick="toggleSimpleLanguage()">💬 Simple Words</button>
-            <button class="tool-button" onclick="printTest()">🖨️ Print Test</button>
-        </div>
-
-        <div class="language-selector">
-            <div style="text-align: center; margin-bottom: 15px;">
-                <strong style="font-size: 1.3em;">🌍 Choose Your Language:</strong>
-                <p style="font-size: 0.95em; color: #666; margin-top: 8px;">
-                    Available: English, Spanish (Español), Chinese (中文), Korean (한국어), Albanian (Shqip), Arabic (العربية), and 100+ more!
-                </p>
+        <div class="toolbar-content" id="toolbarContent">
+            <div class="toolbar-buttons">
+                <button class="tool-button" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+                <button class="tool-button" onclick="increaseFontSize()">🔍 Bigger Text</button>
+                <button class="tool-button" onclick="decreaseFontSize()">🔍 Smaller Text</button>
+                <button class="tool-button" onclick="toggleDyslexiaFont()">📖 Dyslexia Font</button>
+                <button class="tool-button" onclick="enableTextToSpeech()">🔊 Read Aloud</button>
+                <button class="tool-button" onclick="toggleFocusMode()">🎯 Focus Mode</button>
+                <button class="tool-button" onclick="toggleSimpleLanguage()">💬 Simple Words</button>
+                <button class="tool-button" onclick="printTest()">🖨️ Print Test</button>
             </div>
-            <div id="google_translate_element"></div>
-        </div>
 
-        <div class="status-indicator">
-            <strong>🎯 Active Features:</strong> <span id="activeFeatures">None</span>
+            <div class="language-selector">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <strong style="font-size: 1.3em;">🌍 Choose Your Language:</strong>
+                    <p style="font-size: 0.95em; color: #666; margin-top: 8px;">
+                        Available: English, Spanish (Español), Chinese (中文), Korean (한국어), Albanian (Shqip), Arabic (العربية), and 100+ more!
+                    </p>
+                </div>
+                <div id="google_translate_element"></div>
+            </div>
+
+            <div class="status-indicator">
+                <strong>🎯 Active Features:</strong> <span id="activeFeatures">None</span>
+            </div>
         </div>
     </div>
 
@@ -1253,6 +1295,23 @@
         let focusModeActive = false;
         let textToSpeechActive = false;
         let simpleLanguageActive = false;
+        let toolbarCollapsed = false;
+
+        // Toggle Toolbar
+        function toggleToolbar() {
+            const toolbarContent = document.getElementById('toolbarContent');
+            const minimizeBtn = document.getElementById('minimizeBtn');
+            
+            toolbarCollapsed = !toolbarCollapsed;
+            
+            if (toolbarCollapsed) {
+                toolbarContent.classList.add('collapsed');
+                minimizeBtn.textContent = '▼ Show Tools';
+            } else {
+                toolbarContent.classList.remove('collapsed');
+                minimizeBtn.textContent = '▲ Minimize';
+            }
+        }
 
         // Update status indicator
         function updateStatus() {
